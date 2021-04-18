@@ -1,0 +1,10 @@
+#main{
+    width: fit-content;
+    margin: auto;
+}
+
+.item{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
