@@ -1,12 +1,18 @@
 let todoList = [];
 
 const addTodo = function () {
-    const item = document.getElementById("todo-input").value;
+    const inputField = document.getElementById("todo-input");
+    const item = inputField.value;
+    if(item.length === 0){
+        inputField.style = 'border: 1px solid red';
+        return;
+    }
 
     todoList.push(item);
     listTodos();
 
-    document.getElementById("todo-input").value = "";
+    inputField.value = "";
+    inputField.style = 'border: 1px solid darkgray';
 }
 
 const deleteItem = function (item) {
