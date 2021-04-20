@@ -1,10 +1,45 @@
+body{
+    background-color: lightgrey;
+}
+
 #main{
     width: fit-content;
     margin: auto;
+    height: 90vh;
+    padding: 20px 10%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px darkgray;
+}
+
+h1, h2{
+    text-align: center;
+}
+
+#input-div{
+    display: flex;
+    justify-content: center;
+}
+
+input[type=text]{
+    margin-right: 10px;
+}
+
+i{
+    visibility: hidden;
+    float: right;
+}
+
+label{
+    padding: 0 10px;
 }
 
 .item{
     display: flex;
     flex-flow: row;
     align-items: center;
+}
+
+input[type=checkbox]:checked + label{
+    text-decoration: line-through;
 }
