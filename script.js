@@ -16,13 +16,12 @@ const deleteItem = function (item) {
 
 const listTodos = function(){
     document.getElementById("todo-items").innerHTML = "";
-    let itemCheckbox, itemIcon;
     todoList.forEach((item) => {
         let itemsList = document.getElementById("todo-items");
-        itemCheckbox = `<input type=checkbox name=${item}'>`
-        itemsList.innerHTML += `<div class=item>${itemCheckbox}
+        itemsList.innerHTML += `<div class=item>
+                                    <input type=checkbox name=${item}'>
                                     <label for=${item}>${item}</label>
-                                    <i class='fa fa-trash' aria-hidden='true' onclick='deleteItem(${item})'></i>
+                                    <i class='fa fa-trash' aria-hidden='true' onclick="deleteItem('${item}')"></i>
                                 </div>`
     })
 }
