@@ -3,19 +3,16 @@ let todoList = [];
 //function to add to-do item to the array then list them out
 const addTodo = function () {
     const inputField = document.getElementById("todo-input");
-    const item = inputField.value;
+    const todoItem = inputField.value;
 
-    //validating that user entered text into field, otherwise add red border & exit
-    if(item.length === 0){
+    if(todoItem.length === 0){
         inputField.style = 'border: 1px solid red';
         return;
     }
 
-    todoList.push(item);
+    todoList.push(todoItem);
     listTodos();
 
-    //clearing text in input field and reseting border
-    //styling in case it was changed to red
     inputField.value = "";
     inputField.style = 'border: 1px solid darkgray';
 }
@@ -26,29 +23,54 @@ const deleteItem = function (todoItem) {
     listTodos();
 }
 
-//will display trash icon if box is checked
-//or hid icon if box is unchecked
-const checkBox = function(todoItem) {
-    const checkbox = document.getElementById(todoItem+"-checkbox");
-    const icon = document.getElementById(todoItem + "-icon");
-    
-    if(checkbox.checked){
-        icon.style = 'display: block'
-    } else {
-        icon.style = 'display: none'
-    }
+//display trash icon if box is checked, or hid of unchecked
+const checkBox = function(itemIndex) {
+    const checkbox = document.getElementById(`checkbox-${itemIndex}`);
+    const icon = document.getElementById(`icon-${itemIndex}`);
+
+    checkbox.checked ? icon.style = 'display: block' : icon.style = 'display: none';
 }
 
 //creates HTML as string for each todo item then appends to todo-items DIV box
 const listTodos = function(){
-    document.getElementById("todo-items").innerHTML = "";
+    document.getElementById("todo-items").textContent = "";
 
     todoList.forEach((item) => {
         let itemsList = document.getElementById("todo-items");
-        itemsList.innerHTML += `<div class=item-div>
-                                    <input type=checkbox id='${item}-checkbox' name=${item} onclick="checkBox('${item}')">
-                                    <label for=${item}>${item}</label>
-                                    <span><i id='${item}-icon' class='fa fa-trash' style='display: none' aria-hidden='true' onclick="deleteItem('${item}')"></i></span>
-                                </div>`
+        itemsList.appendChild(createNewElement(item));
     })
+}
+const createNewElement = function (todoText) {
+    const index = todoList.indexOf(todoText);
+    const div = document.createElement('div');
+    div.class = 'todoitem-div';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `checkbox-${index}`;
+    checkbox.name = todoText;
+    checkbox.onclick = function() {
+        const icon = document.getElementById(`icon-${index}`);
+        checkbox.checked ? icon.style = 'display: block' : icon.style = 'display: none';
+    }
+
+    div.appendChild(checkbox);
+
+    const label = document.createElement('label');
+    label.for = todoText;
+    label.class = 'sans-serif';
+    label.textContent = todoText;
+
+    div.appendChild(label);
+
+    const span = document.createElement('span');
+    const icon = `<i id=icon-${index} 
+                     class='fa fa-trash'  
+                     aria-hidden='true' 
+                     style='display: none'
+                     onclick='deleteItem("${todoText}")'></i>`
+    span.innerHTML = icon;
+    div.appendChild(span);
+
+    return div;  
 }
