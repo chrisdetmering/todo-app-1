@@ -3,66 +3,89 @@ let todoList = [];
 //function to add to-do item to the array then list them out
 const addTodo = function () {
     const inputField = document.getElementById("todo-input");
-    const todoItem = inputField.value;
+    const todoText = inputField.value;
 
-    if(todoItem.length === 0){
+    if (todoText.length === 0){
         inputField.style = 'border: 1px solid red';
         return;
     }
 
-    todoList.push(todoItem);
+    const todo = { 
+        id: Date.now(), 
+        text: todoText
+    }
+
+    todoList.push(todo);
     listTodos();
 
     inputField.value = "";
     inputField.style = 'border: 1px solid darkgray';
 }
 
-//deletes and item from the array then re-lists todo items
-const deleteItem = function (todoItem) {
-    todoList = todoList.filter((value) => value !== todoItem);
+const deleteItem = function (id) {
+    console.log(todoList);
+    todoList = todoList.filter(todo => todo.id !== id);
     listTodos();
 }
 
-//creates HTML as string for each todo item then appends to todo-items DIV box
 const listTodos = function(){
     document.getElementById("todo-items").textContent = "";
 
-    todoList.forEach((item) => {
+    todoList.forEach((todo) => {
         let itemsList = document.getElementById("todo-items");
-        itemsList.appendChild(createNewElement(item));
+        itemsList.appendChild(createNewElement(todo));
     })
 }
-const createNewElement = function (todoText) {
-    const index = todoList.indexOf(todoText);
-    const div = document.createElement('div');
-    div.class = 'todoitem-div';
 
+const createNewElement = function (todo) {
+    const todoText = todo.text;
+    const index = todoList.indexOf(todoText);
+    const todoDiv = document.createElement('div');
+    todoDiv.id = todo.id; 
+    todoDiv.class = 'todoitem-div';
+
+    const label = createLabel(todoText);
+    const checkbox = createCheckBox(index, todoText, label);
+    
+    const deleteButton = createDeleteIcon(todo.id);
+ 
+    todoDiv.appendChild(label);
+    todoDiv.appendChild(checkbox);
+    todoDiv.appendChild(deleteButton);
+
+    return todoDiv;  
+}
+
+const createCheckBox = function(index, todoText, label) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = `checkbox-${index}`;
     checkbox.name = todoText;
-    checkbox.onclick = function() {
-        const icon = document.getElementById(`icon-${index}`);
-        checkbox.checked ? icon.style = 'display: block' : icon.style = 'display: none';
-    }
 
-    div.appendChild(checkbox);
+    checkbox.addEventListener('click', () =>  { 
+        label.classList.toggle("done");
+    })
 
+    return checkbox; 
+}
+
+const createLabel = function(todoText) { 
     const label = document.createElement('label');
     label.for = todoText;
     label.class = 'sans-serif';
     label.textContent = todoText;
+    return label;
+}
 
-    div.appendChild(label);
-
+const createDeleteIcon = function(id) {
     const span = document.createElement('span');
-    const icon = `<i id=icon-${index} 
-                     class='fa fa-trash'  
-                     aria-hidden='true' 
-                     style='display: none'
-                     onclick='deleteItem("${todoText}")'></i>`
-    span.innerHTML = icon;
-    div.appendChild(span);
+    const icon = document.createElement('i');
+    icon.className = "fa fa-trash"; 
 
-    return div;  
+    icon.addEventListener('click', () => { 
+        deleteItem(id);
+    })
+
+    span.append(icon);
+    return span;
 }
