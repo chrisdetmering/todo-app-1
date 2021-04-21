@@ -23,14 +23,6 @@ const deleteItem = function (todoItem) {
     listTodos();
 }
 
-//display trash icon if box is checked, or hid of unchecked
-const checkBox = function(itemIndex) {
-    const checkbox = document.getElementById(`checkbox-${itemIndex}`);
-    const icon = document.getElementById(`icon-${itemIndex}`);
-
-    checkbox.checked ? icon.style = 'display: block' : icon.style = 'display: none';
-}
-
 //creates HTML as string for each todo item then appends to todo-items DIV box
 const listTodos = function(){
     document.getElementById("todo-items").textContent = "";
